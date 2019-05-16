@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{fragments/layout}">
+<head>
+<title>Books</title>
+</head>
+
+<body>
+
+	<div layout:fragment="content" th:remove="tag">
+		<section>
+			<div class="jumbotron">
+				<div class="container">
+					<h1 th:text="#{books.main}"></h1>
+					<p th:text="#{books.description}"></p>
+				</div>
+			</div>
+
+			<div th:if="${errorMessage}">
+				<div class="alert alert-info" th:text="${errorMessage}"></div>
+			</div>
+			<form action="#"
+				th:action="@{/books/filter(title=${title},author=${author},status=${status})}"
+				method="get" class="thumbnail">
+				<table>
+					<tr>
+						<td><div class="col-lg-10">
+								<label for="Title" th:text="#{book.title}"></label>
+							</div></td>
+						<td><input type="text" id="title" name="title"
+							class="form-control" autofocus="autofocus" placeholder="title"
+							th:value="*{title}"></td>
+					<tr>
+						<td><div class="col-lg-10">
+								<label for="Author" th:text="#{book.author}"></label>
+							</div></td>
+						<td><input type="text" id="author" name="author"
+							class="form-control" placeholder="author" th:value="*{author}">
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div class="col-lg-10">
+								<label for="Status" th:text="#{book.status}"></label>
+							</div>
+						</td>
+						<td><input type="text" id="status" name="status"
+							class="form-control" placeholder="status"
+							th:value="*{status}"></td>
+					</tr>
+				</table>
+				<input type="submit" id="submit" class="btn btn-info" value="Search">
+			</form>
+		</section>
+		<section class="container">
+			<div class="row">
+				<th:block th:each="book : ${bookList}">
+					<div class="col-sm-6 col-md-3" style="padding-bottom: 15px">
+						<div class="thumbnail">
+							<div class="caption">
+								<h3 th:text="${book.id}"></h3>
+								<p th:text="${book.title}"></p>
+								<p th:text="${book.authors}"></p>
+								<p th:text="#{'books.status.'+${book.status}}"></p>
+								<p>
+									<a th:href="@{'/books/book?id='+${book.id}}"
+										class="btn btn-primary"> <span
+										class="glyphicon-info-sign glyphicon"
+										th:text="#{books.details}"></span>
+									</a>
+								</p>
+
+							</div>
+							<form action="#" th:action="@{'/books/remove?id='+${book.id}} "
+								sec:authorize="hasRole('ADMIN')" th:method="post"
+								style="padding-bottom: 30px">
+								<button class="btn btn-primary button_red" id="removeButton">
+									<span class="glyphicon glyphicon-trash"></span>Remove
+								</button>
+
+							</form>
+
+						</div>
+					</div>
+				</th:block>
+			</div>
+		</section>
+
+	</div>
+</body>
+</html>

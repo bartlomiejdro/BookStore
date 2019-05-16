@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{fragments/layout}">
+<head>
+<title th:text="#{book.add}"></title>
+</head>
+<body>
+	<div layout:fragment="content" th:remove="tag">
+		<section>
+			<div class="jumbotron">
+				<div class="container">
+					<h1 th:text="#{book.main}"></h1>
+					<p th:text="#{book.add}"></p>
+				</div>
+			</div>
+		</section>
+		<div th:if="${errorMessage}">
+			<div class="alert alert-info" th:text="${errorMessage}"></div>
+		</div>		
+		<section class="container">
+			<form action="#" th:action="@{/books/add}" th:object="${newBook}"
+				method="post" class="form-horizontal">
+				<fieldset>
+					<legend th:text="#{book.add}"></legend>
+
+					<!-- Sample template for some fields in Book Entity -->
+					<div class="form-group">
+						<label class="control-label col-lg-2" for="name"
+							th:text="#{book.title}"></label>
+						<div class="col-lg-10">
+							<input id="name" type="text" th:field="*{title}"
+								class="form:input-large" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2" for="authors"
+							th:text="#{book.authors}"></label>
+						<div class="col-lg-10">
+							<input id="authors" type="text" th:field="*{authors}"
+								class="form:input-large" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2" for="description"
+							th:text="#{book.description}"></label>
+						<div class="col-lg-10">
+							<input id="description" type="text" th:field="*{description}"
+								class="form:input-large" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2" for="status"
+							th:text="#{book.status}"></label>
+						<div id="status" class="col-lg-10">
+							<input type="radio" th:field="*{status}" th:value="FREE"
+								th:text="#{books.status.FREE}"></input> <input type="radio"
+								th:field="*{status}" th:value="LOAN"
+								th:text="#{books.status.LOAN}"></input> <input type="radio"
+								th:field="*{status}" th:value="MISSING"
+								th:text="#{books.status.MISSING}"></input>
+						</div>
+
+					</div>
+					<div class="form-group">
+						<label class="control-label col-lg-2" for="category"
+							th:text="#{book.categories}"></label>
+						<div class="col-lg-6">
+							<th:block
+								th:each="category : ${T(pl.demo.enumerations.BookCategory).values()}">
+								<div class="col-sm-6 col-lg-6" style="padding-bottom: 15px">
+									<input type="checkbox" id="category" th:field="*{categories}"
+										th:value="${category}" th:text="${category}">
+								</div>
+							</th:block>
+						</div>
+
+					</div>
+					<div class="form-group">
+						<div class="col-lg-offset-2 col-lg-10"
+							style="padding-bottom: 50px">
+							<input type="submit" id="btnAdd" class="btn btn-primary"
+								value="Create" />
+						</div>
+					</div>
+				</fieldset>
+
+			</form>
+		</section>
+	</div>
+</body>
+</html>
